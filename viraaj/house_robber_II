@@ -1,0 +1,28 @@
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        memo1 = [-1] * len(nums)
+        memo2 = [-1] * len(nums)
+
+        def dfsFirst(i):
+            if i >= len(nums) - 1:
+                return 0
+            elif memo1[i] != -1:
+                return memo1[i]
+            else:
+                rob_house = nums[i] + dfsFirst(i + 2)
+                skip_house = dfsFirst(i + 1)
+                memo1[i] = max(rob_house, skip_house)
+            return memo1[i]
+        def dfsLast(i):
+            if i >= len(nums):
+                return 0
+            elif memo2[i] != -1:
+                return memo2[i]
+            else:
+                rob_house = nums[i] + dfsLast(i + 2)
+                skip_house = dfsLast(i + 1)
+                memo2[i] = max(rob_house, skip_house)
+            return memo2[i]
+        if len(nums) == 1:
+            return nums[0]
+        return max(dfsFirst(0), dfsLast(1))
