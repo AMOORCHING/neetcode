@@ -1,0 +1,33 @@
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        # creating net gas array
+        netGas = []
+        for i in range(len(gas)):
+            netGas.append(gas[i] - cost[i])
+        
+        # creating a postfix array to find spot with most gas accumalation
+        # establishing a starting point through the postfix array
+        postfixGas = netGas.copy()
+        startingPoint = (0, 0)
+        increment = 0
+        for i in range(len(gas) - 1, -1, -1):
+            postfixGas[i] = netGas[i] + increment
+            if postfixGas[i] > startingPoint[1]:
+                startingPoint = (i, postfixGas[i])
+            increment += netGas[i]
+        
+     
+        index = startingPoint[0]
+        increment = 0
+        currentGas = 0
+        while increment < len(gas):
+            currentGas += netGas[index]
+            if currentGas < 0:
+                return -1
+            if index < len(gas) - 1:
+                index += 1
+            else:
+                index = 0
+            increment += 1
+        
+        return startingPoint[0]
