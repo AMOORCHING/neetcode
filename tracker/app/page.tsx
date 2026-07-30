@@ -1,5 +1,6 @@
 import { loadTrackerData } from "@/lib/compute";
 import { formatDate } from "@/lib/format";
+import { offsetToIanaZone } from "@/lib/tz";
 import PersonCard from "@/components/PersonCard";
 import RefreshButton from "@/components/RefreshButton";
 
@@ -11,6 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const data = await loadTrackerData();
   const { terms } = data;
+  const tz = offsetToIanaZone(terms.timezoneOffset);
   const repoUrl = `https://github.com/${terms.repo.owner}/${terms.repo.name}`;
 
   return (
@@ -25,7 +27,7 @@ export default async function Home() {
           </h1>
           <p className="mt-1.5 max-w-xl text-sm text-ink-secondary dark:text-white/70">
             {terms.neetcodeMinPerWeek} NeetCode + {terms.appliedMinPerWeek} applied problem per
-            week, {formatDate(terms.startDate)} → {formatDate(terms.endDate)}. Every row is a
+            week, {formatDate(terms.startDate, tz)} → {formatDate(terms.endDate, tz)}. Every row is a
             GitHub commit — nothing here is self-reported.
           </p>
         </div>
@@ -41,7 +43,7 @@ export default async function Home() {
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {data.people.map((result) => (
-          <PersonCard key={result.person.id} result={result} terms={terms} />
+          <PersonCard key={result.person.id} result={result} terms={terms} tz={tz} />
         ))}
       </div>
 
@@ -61,7 +63,7 @@ export default async function Home() {
             tracker.config.json
           </a>
         </p>
-        <p>Synced {formatDate(data.lastSynced)} · auto-refreshes every 2 minutes</p>
+        <p>Synced {formatDate(data.lastSynced, tz)} · auto-refreshes every 2 minutes</p>
       </footer>
     </main>
   );

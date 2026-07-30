@@ -1,9 +1,9 @@
 import type { Week } from "@/lib/types";
 
-function fmtRange(startIso: string, endIso: string) {
+function fmtRange(startIso: string, endIso: string, tz: string) {
   const start = new Date(startIso);
   const end = new Date(new Date(endIso).getTime() - 1);
-  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", timeZone: tz };
   return `${start.toLocaleDateString("en-US", opts)}–${end.toLocaleDateString("en-US", opts)}`;
 }
 
@@ -56,10 +56,12 @@ export default function WeekCard({
   week,
   neetcodeMin,
   appliedMin,
+  tz,
 }: {
   week: Week;
   neetcodeMin: number;
   appliedMin: number;
+  tz: string;
 }) {
   const key =
     week.status === "upcoming"
@@ -85,7 +87,7 @@ export default function WeekCard({
           {meta.label}
         </span>
       </div>
-      <div className="mb-2.5 text-[11px] text-ink-muted">{fmtRange(week.start, week.end)}</div>
+      <div className="mb-2.5 text-[11px] text-ink-muted">{fmtRange(week.start, week.end, tz)}</div>
 
       {week.status === "upcoming" ? (
         <div className="text-[11px] text-ink-muted">Not started</div>

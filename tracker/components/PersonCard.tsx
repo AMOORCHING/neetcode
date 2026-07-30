@@ -11,9 +11,11 @@ const ACCENT: Record<string, string> = {
 export default function PersonCard({
   result,
   terms,
+  tz,
 }: {
   result: PersonResult;
   terms: Terms;
+  tz: string;
 }) {
   const { person, weeks, failedWeeks, skipsRemaining, overallStatus, uncategorized } = result;
   const allProblems = weeks.flatMap((w) => w.problems).sort((a, b) => b.date.localeCompare(a.date));
@@ -78,6 +80,7 @@ export default function PersonCard({
             week={w}
             neetcodeMin={terms.neetcodeMinPerWeek}
             appliedMin={terms.appliedMinPerWeek}
+            tz={tz}
           />
         ))}
       </div>

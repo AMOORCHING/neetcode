@@ -10,10 +10,11 @@ export function relativeTime(iso: string): string {
   return `${weeks}w ago`;
 }
 
-export function formatDate(iso: string): string {
+export function formatDate(iso: string, timeZone?: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    ...(timeZone ? { timeZone } : {}),
   });
 }
