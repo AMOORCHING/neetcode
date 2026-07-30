@@ -1,4 +1,4 @@
-import { getFirstCommitForPath, getManifest, getTree } from "./github";
+import { getFileOrigins, getManifest, getTree } from "./github";
 import type {
   Category,
   OverallStatus,
@@ -33,32 +33,33 @@ export async function loadTrackerData(): Promise<TrackerData> {
   const { terms, categories } = manifest;
   const { owner, name: repo, branch } = terms.repo;
 
-  const tree = await getTree(owner, repo, branch);
+  const [tree, origins] = await Promise.all([
+    getTree(owner, repo, branch),
+    getFileOrigins(owner, repo, branch),
+  ]);
 
   const problemFiles = tree.filter((entry) => {
     if (entry.path.startsWith("tracker/")) return false;
     return terms.people.some((p) => entry.path.startsWith(`${p.folder}/`));
   });
 
-  const problems: Problem[] = await Promise.all(
-    problemFiles.map(async (entry) => {
-      const commit = await getFirstCommitForPath(owner, repo, entry.path);
-      const personId =
-        terms.people.find((p) => entry.path.startsWith(`${p.folder}/`))?.id ?? "unknown";
-      const category: Category = categories[entry.path] ?? "uncategorized";
-      const filename = entry.path.split("/").pop() ?? entry.path;
-      return {
-        path: entry.path,
-        filename,
-        personId,
-        category,
-        date: commit?.date ?? new Date(0).toISOString(),
-        commitSha: commit?.sha ?? "",
-        commitUrl: commit?.htmlUrl ?? `https://github.com/${owner}/${repo}`,
-        commitMessage: commit?.message ?? "",
-      };
-    })
-  );
+  const problems: Problem[] = problemFiles.map((entry) => {
+    const commit = origins.get(entry.path) ?? null;
+    const personId =
+      terms.people.find((p) => entry.path.startsWith(`${p.folder}/`))?.id ?? "unknown";
+    const category: Category = categories[entry.path] ?? "uncategorized";
+    const filename = entry.path.split("/").pop() ?? entry.path;
+    return {
+      path: entry.path,
+      filename,
+      personId,
+      category,
+      date: commit?.date ?? new Date(0).toISOString(),
+      commitSha: commit?.sha ?? "",
+      commitUrl: commit?.htmlUrl ?? `https://github.com/${owner}/${repo}`,
+      commitMessage: commit?.message ?? "",
+    };
+  });
 
   const now = new Date();
   const start = parseZoned(terms.startDate, terms.timezoneOffset);

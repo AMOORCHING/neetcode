@@ -56,27 +56,74 @@ export type FirstCommit = {
   htmlUrl: string;
 };
 
-export async function getFirstCommitForPath(
+type CommitListItem = {
+  sha: string;
+  html_url: string;
+  commit: { author: { name: string; date: string }; message: string };
+};
+
+async function listAllCommits(owner: string, repo: string, branch: string) {
+  const commits: CommitListItem[] = [];
+  let page = 1;
+  for (;;) {
+    const batch = await ghFetch<CommitListItem[]>(
+      `/repos/${owner}/${repo}/commits?sha=${branch}&per_page=100&page=${page}`
+    );
+    commits.push(...batch);
+    if (batch.length < 100) break;
+    page++;
+  }
+  // Oldest first, so renames/edits can be folded forward in order.
+  return commits.reverse();
+}
+
+type CommitFile = { filename: string; status: string; previous_filename?: string };
+
+async function getCommitFiles(owner: string, repo: string, sha: string) {
+  const data = await ghFetch<{ files?: CommitFile[] }>(`/repos/${owner}/${repo}/commits/${sha}`);
+  return data.files ?? [];
+}
+
+/**
+ * True "publish" date per current file path, following renames — GitHub's
+ * path-scoped /commits endpoint does NOT follow renames (unlike local
+ * `git log --follow`), so a `git mv` resets a file's history there. This
+ * walks every commit in order and carries each file's origin commit forward
+ * through renames, the same way `--follow` does locally.
+ */
+export async function getFileOrigins(
   owner: string,
   repo: string,
-  path: string
-): Promise<FirstCommit | null> {
-  const commits = await ghFetch<
-    Array<{
-      sha: string;
-      html_url: string;
-      commit: { author: { name: string; date: string }; message: string };
-    }>
-  >(`/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}&per_page=100`);
+  branch: string
+): Promise<Map<string, FirstCommit>> {
+  const commits = await listAllCommits(owner, repo, branch);
+  const filesByCommit = await Promise.all(
+    commits.map((c) => getCommitFiles(owner, repo, c.sha))
+  );
 
-  if (commits.length === 0) return null;
-  // GitHub returns newest first; the file's "publish" moment is its oldest commit.
-  const oldest = commits[commits.length - 1];
-  return {
-    sha: oldest.sha,
-    date: oldest.commit.author.date,
-    authorName: oldest.commit.author.name,
-    message: oldest.commit.message.split("\n")[0],
-    htmlUrl: oldest.html_url,
-  };
+  const origins = new Map<string, FirstCommit>();
+
+  commits.forEach((c, i) => {
+    const meta: FirstCommit = {
+      sha: c.sha,
+      date: c.commit.author.date,
+      authorName: c.commit.author.name,
+      message: c.commit.message.split("\n")[0],
+      htmlUrl: c.html_url,
+    };
+    for (const f of filesByCommit[i]) {
+      if (f.status === "renamed" && f.previous_filename) {
+        const prior = origins.get(f.previous_filename);
+        origins.delete(f.previous_filename);
+        origins.set(f.filename, prior ?? meta);
+      } else if (f.status === "removed") {
+        origins.delete(f.filename);
+      } else if (!origins.has(f.filename)) {
+        // "added" (first sighting), or "modified" with no earlier record.
+        origins.set(f.filename, meta);
+      }
+    }
+  });
+
+  return origins;
 }
