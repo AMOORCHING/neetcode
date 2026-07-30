@@ -1,0 +1,47 @@
+{
+  "$note": "Edit and push this file to update the tracker — it reads this directly from GitHub on every load, no redeploy needed. 'terms' mirrors the signed bet sheet. 'categories' tags every problem file as 'leetcode' (counts toward the NeetCode LC minimum) or 'applied' (counts toward the applied minimum). Any tracked file NOT listed here shows up as 'uncategorized' in the UI instead of silently counting toward either total.",
+  "terms": {
+    "repo": { "owner": "AMOORCHING", "name": "neetcode", "branch": "main" },
+    "people": [
+      { "id": "akash", "name": "Akash", "folder": "akash", "color": "akash" },
+      { "id": "viraaj", "name": "Viraaj", "folder": "viraaj", "color": "viraaj" }
+    ],
+    "stakeEach": 1000,
+    "escrowHolder": "Friend",
+    "startDate": "2026-07-13",
+    "endDate": "2026-08-20",
+    "timezoneOffset": "-07:00",
+    "neetcodeMinPerWeek": 5,
+    "appliedMinPerWeek": 1,
+    "freeSkipWeeksAllowed": 0
+  },
+  "categories": {
+    "viraaj/week1/meeting_rooms.py": "leetcode",
+    "viraaj/week1/log_analyzer.py": "applied",
+    "viraaj/week1/climbing_stairs.py": "leetcode",
+    "viraaj/week1/merged_lists.py": "leetcode",
+    "viraaj/week1/kth_largest_elememt": "leetcode",
+    "viraaj/week1/kth_smallest_element_in_BST": "leetcode",
+    "viraaj/week2/min_cost_climbing_stairs.py": "leetcode",
+    "viraaj/week2/house_robber_II": "leetcode",
+    "viraaj/week2/house_robber": "leetcode",
+    "viraaj/week2/max_subarray.py": "leetcode",
+    "viraaj/week2/gas_station": "leetcode",
+    "viraaj/week2/rate_limiter.py": "applied",
+    "viraaj/week3/tribonacci.py": "leetcode",
+    "viraaj/week3/num_decodings.py": "leetcode",
+    "akash/week1/daily_temperatures.py": "leetcode",
+    "akash/week1/last_stone_weight.py": "leetcode",
+    "akash/week1/log_analyzer.py": "applied",
+    "akash/week1/meeting_rooms_2.py": "leetcode",
+    "akash/week1/meeting_schedule.py": "leetcode",
+    "akash/week1/number_of_islands.py": "leetcode",
+    "akash/week2/LRU_cache.py": "leetcode",
+    "akash/week2/house_robber.py": "leetcode",
+    "akash/week2/koko_eating_bananas.py": "leetcode",
+    "akash/week2/last_stone_weight2.py": "leetcode",
+    "akash/week2/minimum_path_sum.py": "leetcode",
+    "akash/week2/rate_limit_violation.py": "applied",
+    "akash/week2/valid_sudoku.py": "leetcode"
+  }
+}
