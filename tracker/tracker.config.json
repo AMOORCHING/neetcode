@@ -42,6 +42,14 @@
     "akash/week2/last_stone_weight2.py": "leetcode",
     "akash/week2/minimum_path_sum.py": "leetcode",
     "akash/week2/rate_limit_violation.py": "applied",
-    "akash/week2/valid_sudoku.py": "leetcode"
+    "akash/week2/valid_sudoku.py": "leetcode",
+    "viraaj/week3/subsets.py": "leetcode",
+    "viraaj/week3/inventory_reconciliation.py": "applied",
+    "akash/week3/subsets.py": "leetcode",
+    "akash/week3/count_good_nodes.py": "leetcode",
+    "akash/week3/valid_binary_tree.py": "leetcode",
+    "akash/week3/combination_sum.py": "leetcode",
+    "akash/week3/combination_sum_2.py": "leetcode",
+    "akash/week3/design_twitter.py": "leetcode"
   }
 }
