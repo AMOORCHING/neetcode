@@ -18,3 +18,4 @@ class Solution:
             memo[i] = ways
             return memo[i]
         return dfs(0)
+    
