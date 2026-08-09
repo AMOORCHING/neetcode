@@ -50,8 +50,16 @@
     "akash/week3/valid_binary_tree.py": "leetcode",
     "akash/week3/combination_sum.py": "leetcode",
     "akash/week3/combination_sum_2.py": "leetcode",
-    "akash/week3/design_twitter.py": "leetcode",
+    "akash/week3/design_twitter.py": "applied",
     "viraaj/week3/walls_and_gates.py": "leetcode",
-    "viraaj/week3/max_area_of_island.py": "leetcode"
+    "viraaj/week3/max_area_of_island.py": "leetcode",
+    "akash/week4/job_queue_retries.py": "applied",
+    "viraaj/week4/add_binary.py": "leetcode",
+    "viraaj/week4/array_sign.py": "leetcode",
+    "viraaj/week4/find_lucky_number.py": "leetcode",
+    "viraaj/week4/in_memory_ttl.py": "applied",
+    "viraaj/week4/ipo.py": "leetcode",
+    "viraaj/week4/is_majority_element.py": "leetcode",
+    "viraaj/week4/job_queue.py": "applied"
   }
 }
