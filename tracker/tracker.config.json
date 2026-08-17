@@ -60,6 +60,11 @@
     "viraaj/week4/in_memory_ttl.py": "applied",
     "viraaj/week4/ipo.py": "leetcode",
     "viraaj/week4/is_majority_element.py": "leetcode",
-    "viraaj/week4/job_queue.py": "applied"
+    "viraaj/week4/job_queue.py": "applied",
+    "akash/week4/binary_search.py": "leetcode",
+    "akash/week4/combinations_phone_number.py": "leetcode",
+    "akash/week4/kth_smallest_int.py": "leetcode",
+    "akash/week4/palindrome_partition.py": "leetcode",
+    "akash/week4/word_search.py": "leetcode"
   }
 }
